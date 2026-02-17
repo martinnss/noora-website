@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
+import MagneticButton from "./MagneticButton";
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -56,12 +57,13 @@ export default function Navbar() {
         </div>
 
         {/* CTA */}
-        <a
+        <MagneticButton
+          as="a"
           href="#contact"
           className="hidden md:inline-flex btn-primary text-white text-[13px] font-semibold px-5 py-2 rounded-xl"
         >
           Solicitar Acceso
-        </a>
+        </MagneticButton>
 
         {/* Mobile Toggle */}
         <button

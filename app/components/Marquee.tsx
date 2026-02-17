@@ -20,17 +20,17 @@ const words = [
 
 export default function Marquee() {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const isInView = useInView(ref, { once: true, margin: "0px 0px -20% 0px" });
 
   return (
-    <section ref={ref} className="relative py-20 overflow-hidden">
+    <section ref={ref} className="relative py-16 overflow-hidden">
       {/* Top fade */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
 
       <motion.div
         initial={{ opacity: 0 }}
         animate={isInView ? { opacity: 1 } : {}}
-        transition={{ duration: 1 }}
+        transition={{ duration: 0.8 }}
       >
         {/* Row 1 */}
         <div className="relative mb-4">

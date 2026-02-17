@@ -2,6 +2,9 @@
 
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
+import PrivacyCube from "./PrivacyCube";
+import { TextReveal } from "./TextReveal";
+import Parallax from "./Parallax";
 
 const features = [
   {
@@ -163,16 +166,16 @@ function FeatureCard({
   index: number;
 }) {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-60px" });
+  const isInView = useInView(ref, { once: true, margin: "0px 0px -25% 0px" });
 
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 30, filter: "blur(8px)" }}
+      initial={{ opacity: 0, y: 20, filter: "blur(6px)" }}
       animate={isInView ? { opacity: 1, y: 0, filter: "blur(0px)" } : {}}
       transition={{
-        duration: 0.7,
-        delay: index * 0.08,
+        duration: 0.6,
+        delay: index * 0.05,
         ease: [0.16, 1, 0.3, 1],
       }}
       className={`${feature.span} group`}
@@ -208,47 +211,75 @@ function FeatureCard({
 
 export default function BentoFeatures() {
   const headerRef = useRef(null);
-  const headerInView = useInView(headerRef, { once: true, margin: "-80px" });
-
+  const headerInView = useInView(headerRef, { once: true, margin: "0px 0px -20% 0px" });
+  const sectionRef = useRef(null);
   return (
-    <section id="features" className="relative py-32 px-6">
-      {/* Ambient glow */}
-      <div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] rounded-full pointer-events-none"
-        style={{
-          background: "radial-gradient(ellipse, rgba(255,77,0,0.03) 0%, transparent 70%)",
-          filter: "blur(80px)",
-        }}
-      />
+    <section ref={sectionRef} id="features" className="relative py-24 px-6">
+      {/* Ambient glow with parallax */}
+      <Parallax speed={0.3} className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] rounded-full pointer-events-none">
+        <div
+          className="w-full h-full"
+          style={{
+            background: "radial-gradient(ellipse, rgba(45,168,143,0.03) 0%, transparent 70%)",
+            filter: "blur(80px)",
+          }}
+        />
+      </Parallax>
 
       <div className="max-w-6xl mx-auto relative z-10">
-        {/* Section Header */}
-        <motion.div
-          ref={headerRef}
-          initial={{ opacity: 0, y: 30 }}
-          animate={headerInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="text-center mb-20"
-        >
-          <span className="inline-block text-[11px] font-bold text-accent/70 tracking-[0.2em] uppercase mb-5">
+        {/* Section Header with staggered text reveal */}
+        <div ref={headerRef} className="text-center mb-16">
+          <motion.span
+            initial={{ opacity: 0, y: 10 }}
+            animate={headerInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.5 }}
+            className="inline-block text-[11px] font-bold text-accent/70 tracking-[0.2em] uppercase mb-4"
+          >
             Funciones
-          </span>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-gradient mb-6 leading-tight">
-            Todo lo que necesitas,
-            <br />
-            justo cuando lo necesitas
+          </motion.span>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-black mb-5 leading-tight">
+            <TextReveal delay={0.05}>
+              <span className="text-gradient">Todo lo que necesitas,</span>
+            </TextReveal>
+            <TextReveal delay={0.1}>
+              <span className="text-gradient">justo cuando lo necesitas</span>
+            </TextReveal>
           </h2>
-          <p className="text-base md:text-lg text-pure-white/30 max-w-xl mx-auto font-light">
+          <motion.p
+            initial={{ opacity: 0, y: 15 }}
+            animate={headerInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="text-base md:text-lg text-pure-white/30 max-w-xl mx-auto font-light"
+          >
             Inteligencia contextual que transforma cada reunión en una experiencia
             productiva.
-          </p>
-        </motion.div>
+          </motion.p>
+        </div>
 
         {/* Bento Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {features.map((feature, i) => (
             <FeatureCard key={feature.title} feature={feature} index={i} />
           ))}
+        </div>
+
+        {/* Privacy Cube Metaphor — Scroll-linked */}
+        <div className="mt-24">
+          <div className="text-center mb-8">
+            <TextReveal>
+              <span className="text-2xl md:text-3xl font-black text-gradient">Tus datos, siempre protegidos</span>
+            </TextReveal>
+            <motion.p
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3 }}
+              className="text-sm text-pure-white/25 mt-3"
+            >
+              Scroll para ver cómo Noora protege tu información
+            </motion.p>
+          </div>
+          <PrivacyCube />
         </div>
       </div>
     </section>

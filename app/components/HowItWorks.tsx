@@ -2,6 +2,7 @@
 
 import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
+import { TextReveal } from "./TextReveal";
 
 const steps = [
   {
@@ -36,16 +37,16 @@ const steps = [
 
 function StepCard({ step, index }: { step: (typeof steps)[0]; index: number }) {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-60px" });
+  const isInView = useInView(ref, { once: true, margin: "0px 0px -25% 0px" });
 
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 40, filter: "blur(8px)" }}
+      initial={{ opacity: 0, y: 25, filter: "blur(6px)" }}
       animate={isInView ? { opacity: 1, y: 0, filter: "blur(0px)" } : {}}
       transition={{
-        duration: 0.7,
-        delay: index * 0.12,
+        duration: 0.6,
+        delay: index * 0.08,
         ease: [0.16, 1, 0.3, 1],
       }}
       className="relative group"
@@ -100,39 +101,49 @@ function StepCard({ step, index }: { step: (typeof steps)[0]; index: number }) {
 export default function HowItWorks() {
   const sectionRef = useRef(null);
   const headerRef = useRef(null);
-  const headerInView = useInView(headerRef, { once: true, margin: "-80px" });
+  const headerInView = useInView(headerRef, { once: true, margin: "0px 0px -20% 0px" });
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start end", "end start"],
   });
-  const lineWidth = useTransform(scrollYProgress, [0.2, 0.8], ["0%", "100%"]);
+  const lineWidth = useTransform(scrollYProgress, [0.15, 0.65], ["0%", "100%"]);
 
   return (
-    <section ref={sectionRef} id="how-it-works" className="relative py-32 px-6 overflow-hidden">
+    <section ref={sectionRef} id="how-it-works" className="relative py-24 px-6 overflow-hidden">
       {/* Dot matrix background */}
       <div className="absolute inset-0 dot-matrix opacity-30" />
 
       <div className="max-w-6xl mx-auto relative z-10">
-        {/* Section Header */}
-        <motion.div
+        {/* Section Header with staggered text reveal */}
+        <div
           ref={headerRef}
-          initial={{ opacity: 0, y: 30 }}
-          animate={headerInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="text-center mb-6"
+          className="text-center mb-12"
         >
-          <span className="inline-block text-[11px] font-bold text-accent/70 tracking-[0.2em] uppercase mb-5">
+          <motion.span
+            initial={{ opacity: 0, y: 10 }}
+            animate={headerInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.5 }}
+            className="inline-block text-[11px] font-bold text-accent/70 tracking-[0.2em] uppercase mb-4"
+          >
             Cómo Funciona
-          </span>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-gradient mb-6 leading-tight">
-            Simple de usar,
-            <br />
-            poderoso en cada reunión
+          </motion.span>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-black mb-5 leading-tight">
+            <TextReveal delay={0.05}>
+              <span className="text-gradient">Simple de usar,</span>
+            </TextReveal>
+            <TextReveal delay={0.1}>
+              <span className="text-gradient">poderoso en cada reunión</span>
+            </TextReveal>
           </h2>
-          <p className="text-base md:text-lg text-pure-white/30 max-w-xl mx-auto font-light">
+          <motion.p
+            initial={{ opacity: 0, y: 15 }}
+            animate={headerInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="text-base md:text-lg text-pure-white/30 max-w-xl mx-auto font-light"
+          >
             Cuatro pasos para transformar la manera en que trabajas con tu equipo.
-          </p>
-        </motion.div>
+          </motion.p>
+        </div>
 
         {/* Progress line */}
         <div className="relative max-w-3xl mx-auto mb-16">

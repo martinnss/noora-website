@@ -2,6 +2,7 @@
 
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { useRef, useState, useEffect, useCallback } from "react";
+import { TextReveal } from "./TextReveal";
 
 const testimonials = [
   {
@@ -36,7 +37,7 @@ const testimonials = [
 
 export default function Testimonials() {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-80px" });
+  const isInView = useInView(ref, { once: true, margin: "0px 0px -20% 0px" });
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState(1);
 
@@ -65,12 +66,12 @@ export default function Testimonials() {
   };
 
   return (
-    <section className="relative py-32 px-6 overflow-hidden">
+    <section className="relative py-24 px-6 overflow-hidden">
       {/* Ambient */}
       <div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] rounded-full pointer-events-none"
         style={{
-          background: "radial-gradient(ellipse, rgba(255,77,0,0.03) 0%, transparent 70%)",
+          background: "radial-gradient(ellipse, rgba(45,168,143,0.03) 0%, transparent 70%)",
           filter: "blur(60px)",
         }}
       />
@@ -78,18 +79,21 @@ export default function Testimonials() {
       <div className="max-w-4xl mx-auto relative z-10">
         <motion.div
           ref={ref}
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-16"
+          transition={{ duration: 0.6 }}
+          className="text-center mb-12"
         >
-          <span className="inline-block text-[11px] font-bold text-accent/70 tracking-[0.2em] uppercase mb-5">
+          <span className="inline-block text-[11px] font-bold text-accent/70 tracking-[0.2em] uppercase mb-4">
             Testimonios
           </span>
-          <h2 className="text-4xl md:text-5xl font-black text-gradient">
-            Lo que dicen nuestros
-            <br />
-            primeros usuarios
+          <h2 className="text-4xl md:text-5xl font-black">
+            <TextReveal delay={0.05}>
+              <span className="text-gradient">Lo que dicen nuestros</span>
+            </TextReveal>
+            <TextReveal delay={0.1}>
+              <span className="text-gradient">primeros usuarios</span>
+            </TextReveal>
           </h2>
         </motion.div>
 
