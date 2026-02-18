@@ -1,24 +1,32 @@
 name: Build Windows App
 on:
   push:
-    branches: [ main ] # Or "master" if that is your branch name
+    branches: [ main ] # Verifica si tu rama se llama 'main' o 'master'
 
 jobs:
   build:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: subosito/flutter-action@v2
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
+          flutter-version: '3.x' # Usa la versión más reciente de la rama estable
+
       - name: Enable Windows Desktop
         run: flutter config --enable-windows-desktop
-      - name: Get Packages
+
+      - name: Get dependencies
         run: flutter pub get
-      - name: Build Windows
+
+      - name: Build Windows Release
         run: flutter build windows --release
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v3
+
+      - name: Upload Windows Build
+        uses: actions/upload-artifact@v4
         with:
-          name: windows-exe
+          name: mi-app-windows
           path: build/windows/runner/Release/
